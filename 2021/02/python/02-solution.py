@@ -5,41 +5,38 @@ from sys import argv
 
 filename = argv[1]
 
-nlist = []
-# ndict = {}
 
-with open(filename) as input:
-    for line in input:
-        nlist.append(int(line))
+def solution1():
+    h = 0
+    v = 0
 
-# nprev = nlist[0]
-# inc = 0
-# for n in nlist[1:]:
-#     if n > nprev:
-#         print(f"{n} is bigger than {nprev}")
-#         inc += 1
-#     nprev = n
+    with open(filename) as input:
+        for line in input:
+            if "forward" in line:
+                h += int(line.split()[1])
+            elif "up" in line:
+                v -= int(line.split()[1])
+            elif "down" in line:
+                v += int(line.split()[1])
+    print(h * v)
 
-# print(inc)
 
-# solution 2
-index = 1
-prev_total = nlist[0] + nlist[1] + nlist[2]
-total = 0
-inc = 0
-for n in nlist[1:]:
-    try:
-        total = nlist[index] + nlist[index+1] + nlist[index+2]
-        print(
-            f"total: {(nlist[index], nlist[index+1], nlist[index+2])} {total} prev_total: {prev_total}")
-        if total > prev_total:
-            inc += 1
-        print(f"==Index: {index} Len: {len(nlist)} Inc: {inc}")
+def solution2():
+    aim = 0
+    h = 0
+    v = 0
 
-        prev_total = total
-        index += 1
-    except:
-        # print(f"Inc: {inc}")
-        # print(traceback.format_exc())
-        break
-print(f"Inc: {inc}")
+    with open(filename) as input:
+        for line in input:
+            if "forward" in line:
+                h += int(line.split()[1])
+                v += aim * int(line.split()[1])
+            elif "up" in line:
+                aim -= int(line.split()[1])
+            elif "down" in line:
+                aim += int(line.split()[1])
+    print(h * v)
+
+
+if __name__ == "__main__":
+    solution2()
