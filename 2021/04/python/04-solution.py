@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# TODO: I think that only one board can win per turn, which is causing boards to fill up too quickly
+# TODO: I think that only one board can win per turn, which is causing board states to fill up
 
 import copy
 from pprint import pprint
@@ -11,7 +11,7 @@ boards = []
 board_states = {}
 game_numbers = []
 already_won = []
-winning_states = {}
+number_states = {}
 
 
 def parse_game(game_input):
@@ -42,16 +42,27 @@ def parse_game(game_input):
     boards.append(current_board)
 
 
-def is_game_finished():
+def is_game_finished(part2=False):
     print("len boards", len(boards))
     print("len already won", len(already_won))
+    print("arr already won", already_won)
+    game_finished = False
+
     for state in board_states:
         verticals = [[], [], [], [], []]
         # check horizontals
         for row in board_states[state]:
             if all(n == 1 for n in row) and state not in already_won:
                 already_won.append(state)
-                return (True, state)
+                if len(already_won) == 100:
+                    print("LASTWINNERHERE", state)
+                    pprint(board_states[state])
+                    pprint(boards[state])
+                    print("--------------------------")
+                game_finished = True
+
+                if not part2:
+                    return (True, state)
             v_index = 0
             for n in row:
                 verticals[v_index].append(n)
@@ -61,8 +72,17 @@ def is_game_finished():
         for col in verticals:
             if all(n == 1 for n in col) and state not in already_won:
                 already_won.append(state)
-                return (True, state)
-    return (False, None)
+                if len(already_won) == 100:
+                    print("LASTWINNERHERE", state)
+                    pprint(board_states[state])
+                    pprint(boards[state])
+                    print("--------------------------")
+                game_finished = True
+
+                if not part2:
+                    return (True, state)
+
+    return (game_finished, None)
 
 
 def mark_number_on_board(target_num, board_index, board):
@@ -82,6 +102,8 @@ def run_turn():
         for board in boards:
             mark_number_on_board(target_num, board_index, board)
             board_index += 1
+    number_states[target_num] = copy.deepcopy(board_states)
+
     return target_num
 
 
@@ -117,9 +139,20 @@ def run_game(part1=True):
     last_winning_num = None
 
     while len(game_numbers) > 0:
+        if len(boards) == len(already_won):
+            last_won_board = already_won[-1]
+            pprint(number_states[last_won_board][last_won_board])
+            pprint(boards[last_won_board])
+            last_sum = sum_uncalled_numbers(
+                last_won_board, state_copy=number_states[last_won_board][last_won_board])
+            print("last sum", last_sum)
+            print("last num", last_winning_num)
+            break
+
         print(game_numbers)
         target_num = run_turn()
-        check_finish = is_game_finished()
+        print("TARGET NUMBER:", target_num)
+        check_finish = is_game_finished(part2=True)
 
         if part1:
             if check_finish[0]:
@@ -129,20 +162,14 @@ def run_game(part1=True):
                 break
         else:
             if check_finish[0]:
-                print("A BOARD WON", check_finish[1])
-                pprint(boards[check_finish[1]])
-                pprint(board_states[check_finish[1]])
-                print(already_won)
+                # print("A BOARD WON", check_finish[1])
                 last_winning_num = target_num
-                last_winning_state = copy.deepcopy(
-                    board_states[check_finish[1]])
-                last_winning_board = check_finish[1]
 
-    if not part1:
-        print(last_winning_num)
-        pprint(last_winning_state)
-        print("part2: ", last_winning_num *
-              sum_uncalled_numbers(last_winning_board, state_copy=last_winning_state))
+    # if not part1:
+    #     print(last_winning_num)
+    #     pprint(last_winning_state)
+    #     print("part2: ", last_winning_num *
+    #           sum_uncalled_numbers(last_winning_board, state_copy=last_winning_state))
 
 
 if __name__ == "__main__":
