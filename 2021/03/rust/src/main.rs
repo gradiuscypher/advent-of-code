@@ -4,16 +4,20 @@ use std::{fs::File, io::BufReader};
 
 fn main() {
     let lines = read_lines("03-example.txt");
-    for line in lines {
-        println!("{}", line);
-    }
+    most_common_bits(lines);
 }
 
 fn calculate_gamma() {}
 
 fn calculate_epsilon() {}
 
-fn most_common_bit() {}
+fn most_common_bits(input: Vec<String>) {
+    let mut out_string: String = "".to_owned();
+    for line in input {
+        out_string.push(line.chars().nth(0).expect("Can't get char."));
+    }
+    println!("{}", out_string);
+}
 
 fn least_common_bit(input: Vec<&str>) -> char {
     '1'
