@@ -3,9 +3,15 @@
 from sys import argv
 
 
-if __name__ == '__main__':
-    filename = argv[1]
+def load_input(filename):
+    grid = []
 
     with open(filename) as input:
         for line in input:
-            sline = line.strip().split('-')
+            pass
+
+
+if __name__ == '__main__':
+    filename = argv[1]
+
+    load_input(filename)

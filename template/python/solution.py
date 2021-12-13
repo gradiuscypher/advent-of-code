@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 
+import logging
 from sys import argv
+
+
+# logging so that I can throw debug strings around without feeling bad
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(message)s')
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
 
 if __name__ == '__main__':
