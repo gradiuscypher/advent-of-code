@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
 
+"""
+Notes:
+# Breadth First Search Approach?
+
+"""
+
 from sys import argv
 
 
 def load_input(filename):
-    grid = []
-
-    with open(filename) as input:
-        for line in input:
-            pass
+    data_list = []
+    with open(filename) as inputfile:
+        for line in inputfile:
+            data_list.append(line.strip().split('-'))
+    return data_list
 
 
 if __name__ == '__main__':
