@@ -14,9 +14,12 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 
-if __name__ == '__main__':
-    filename = argv[1]
-
+def load_input(filename):
     with open(filename) as input:
         for line in input:
             pass
+
+
+if __name__ == '__main__':
+    filename = argv[1]
+    load_input(filename)
