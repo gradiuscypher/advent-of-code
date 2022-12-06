@@ -1,4 +1,3 @@
-use std::str::Split;
 use std::{collections::VecDeque, fs::File, io::Read};
 
 fn parse_stacks(input: &str) -> Vec<Vec<char>> {
