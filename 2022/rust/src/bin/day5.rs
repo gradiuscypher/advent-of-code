@@ -78,12 +78,27 @@ fn make_stacks(input: &Vec<Vec<char>>) -> Vec<VecDeque<char>> {
 fn follow_instructions(
     mut stacks: Vec<VecDeque<char>>,
     instructions: Vec<Vec<u32>>,
+    part2: bool,
 ) -> Vec<VecDeque<char>> {
-    for inst in instructions {
-        // count, source, dest
-        for _ in 0..inst[0] {
-            let target_char = stacks[(inst[1] - 1) as usize].pop_front().unwrap();
-            stacks[(inst[2] - 1) as usize].push_front(target_char);
+    if !part2 {
+        for inst in instructions {
+            // count, source, dest
+            for _ in 0..inst[0] {
+                let target_char = stacks[(inst[1] - 1) as usize].pop_front().unwrap();
+                stacks[(inst[2] - 1) as usize].push_front(target_char);
+            }
+        }
+    } else {
+        for inst in instructions {
+            // count, source, dest
+            let mut out_stack: VecDeque<char> = VecDeque::new();
+            for _ in 0..inst[0] {
+                out_stack.push_front(stacks[(inst[1] - 1) as usize].pop_front().unwrap());
+            }
+            // push the outstack to the right spot
+            while out_stack.len() > 0 {
+                stacks[(inst[2] - 1) as usize].push_front(out_stack.pop_front().unwrap());
+            }
         }
     }
 
@@ -98,22 +113,27 @@ fn load_file(filename: &str) -> String {
     data
 }
 
-fn part1(input: Vec<VecDeque<char>>) {
+fn output(input: Vec<VecDeque<char>>) {
     let mut output = "".to_string();
     for mut col in input {
         output.push(col.pop_front().unwrap());
     }
-    println!("Part1: {output}");
+    println!("{output}");
 }
 
 fn main() {
     let data = load_file("input/day5.txt");
+    // let data = load_file("input/day5_ex.txt");
     let mut split_data = data.split("\n\n");
 
     let parsed_stacks = parse_stacks(split_data.next().unwrap());
     let stacks = make_stacks(&parsed_stacks);
     let instructions = parse_instructions(split_data.next().unwrap());
-    let sorted_stack = follow_instructions(stacks, instructions);
+    let part1_sorted_stack = follow_instructions(stacks.clone(), instructions.clone(), false);
+    let part2_sorted_stack = follow_instructions(stacks.clone(), instructions.clone(), true);
 
-    part1(sorted_stack.clone());
+    print!("Part1: ");
+    output(part1_sorted_stack.clone());
+    print!("Part2: ");
+    output(part2_sorted_stack.clone());
 }
