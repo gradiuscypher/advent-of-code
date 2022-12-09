@@ -1,18 +1,13 @@
 use std::{collections::HashMap, fs::File, io::Read};
 
-#[derive(Debug)]
-struct Item {
-    name: String,
-    size: u32,
-}
-
 fn load_file(filename: &str) {
     let mut file = File::open(filename).ok().unwrap();
     let mut data = String::new();
     file.read_to_string(&mut data).unwrap();
 
     let mut directories: Vec<String> = Vec::new();
-    let mut all_files: HashMap<String, Vec<Item>> = HashMap::new();
+    let mut dir_sizes: HashMap<String, u32> = HashMap::new();
+    directories.push("/".to_string());
 
     for line in data.split("\n") {
         if line.contains("$ cd") {
@@ -22,41 +17,32 @@ fn load_file(filename: &str) {
                 directories.pop();
             } else {
                 directories.push(target_dir.to_string());
+
+                if !dir_sizes.contains_key(target_dir) {
+                    dir_sizes.insert(target_dir.to_string(), 0);
+                }
             }
         } else {
             if !line.contains("$") && !line.starts_with("dir") && line.len() > 0 {
-                let cur_dir = directories.last().unwrap();
                 let cur_line = line.split(" ").collect::<Vec<&str>>();
-                println!("{:?} {}", cur_dir, line);
+                let cur_size = cur_line[0].parse::<u32>().unwrap();
 
-                if all_files.contains_key(cur_dir) {
-                    let file_list = all_files.get_mut(cur_dir).unwrap();
-                    file_list.push(Item {
-                        name: cur_line[1].to_string(),
-                        size: cur_line[0].parse::<u32>().unwrap(),
-                    });
-                } else {
-                    let mut file_list: Vec<Item> = Vec::new();
-                    file_list.push(Item {
-                        name: cur_line[1].to_string(),
-                        size: cur_line[0].parse::<u32>().unwrap(),
-                    });
-                    all_files.insert(cur_dir.clone(), file_list);
+                for dir in &directories {
+                    dir_sizes
+                        .entry(dir.to_string())
+                        .and_modify(|counter| *counter += cur_size)
+                        .or_insert(0);
                 }
             }
         }
     }
+    println!("{:#?}", dir_sizes);
 
     let mut total_sum = 0;
 
-    for (dir, file_list) in all_files {
-        let mut total_size = 0;
-        for entry in file_list {
-            total_size += entry.size;
-        }
-
-        if total_size < 100000 {
-            total_sum += total_size;
+    for (_, dir_size) in dir_sizes {
+        if dir_size <= 100000 {
+            total_sum += dir_size;
         }
     }
 
@@ -64,6 +50,8 @@ fn load_file(filename: &str) {
 }
 
 fn main() {
-    load_file("input/day7_ex.txt")
-    // load_file("input/day7.txt")
+    // too low : 967369
+
+    // load_file("input/day7_ex.txt")
+    load_file("input/day7.txt")
 }
