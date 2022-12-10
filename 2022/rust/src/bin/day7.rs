@@ -40,7 +40,7 @@ fn load_file(filename: &str) {
 
     let mut total_sum = 0;
 
-    for (_, dir_size) in dir_sizes {
+    for (_, dir_size) in dir_sizes.clone() {
         if dir_size <= 100000 {
             total_sum += dir_size;
         }
