@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "aoc-2019"
+version = "0.1.0"
+description = ""
+authors = ["gradiuscypher <gradiuscypher@gmail.com>"]
+readme = "README.md"
+packages = [{include = "aoc_2019"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+ipython = "^8.16.1"
+mypy = "^1.6.1"
+python-dotenv = "^1.0.0"
+requests = "^2.31.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
