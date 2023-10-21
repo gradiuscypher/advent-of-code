@@ -12,6 +12,8 @@ ipython = "^8.16.1"
 mypy = "^1.6.1"
 python-dotenv = "^1.0.0"
 requests = "^2.31.0"
+shapely = "^2.0.2"
+matplotlib = "^3.8.0"
 
 [build-system]
 requires = ["poetry-core"]
