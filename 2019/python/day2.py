@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 solution for day2
+tags:
 """
 import copy
 import threading

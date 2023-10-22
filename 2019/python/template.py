@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
 solution for dayN
+tags:
 """
 
 from helpers import get_input
