@@ -18,3 +18,7 @@ matplotlib = "^3.8.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.'MESSAGES CONTROL']
+max-line-length = 256
+disable = "C0330, R0201"
