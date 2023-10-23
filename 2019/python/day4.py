@@ -3,7 +3,7 @@
 solution for day4
 ref: https://stackoverflow.com/questions/6785226/pass-multiple-parameters-to-concurrent-futures-executor-map
 ref: https://realpython.com/intro-to-python-threading/#using-a-threadpoolexecutor
-tags: concurrency, threads, range
+tags: concurrency, threads, range, magic
 """
 
 import concurrent.futures
