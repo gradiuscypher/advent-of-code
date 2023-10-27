@@ -4,7 +4,6 @@ solution for day5
 tags: log,
 """
 
-import math
 import logging
 import sys
 from helpers import get_input
