@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-solution for dayN
-tags:
+solution for day1
+tags: wtf, substring
 """
 
 import logging
@@ -28,14 +28,6 @@ def find_substr(whole_str, sub_str):
 def part_one():
     """solution for part one"""
     inp = get_input(2023, 1).strip().split("\n")
-    # inp = """
-    # 1abc2
-    # pqr3stu8vwx
-    # a1b2c3d4e5f
-    # treb7uchet
-    # """.strip().split(
-    #     "\n"
-    # )
 
     total = 0
     count = 0
@@ -61,8 +53,6 @@ def part_one():
 def part_two():
     """
     solution for part two
-    55078 - wrong
-    54705 - high
     """
     total = 0
     num_strs = [
@@ -97,8 +87,6 @@ def part_two():
         highest = None
         hi_ind = 0
 
-        # print("line:", line)
-
         for s in num_strs:
             if s in line:
                 locs = find_substr(line, s)
@@ -121,7 +109,6 @@ def part_two():
 
         for c in line:
             if c.isdigit():
-                # loc = line.index(c)
                 locs = find_char(line, c)
                 for loc in locs:
                     if not lowest:
