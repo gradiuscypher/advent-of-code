@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """
-solution for dayN
-tags:
+solution for day2
+tags: dict
 """
 
 import logging
-from pprint import pprint
 from helpers import get_input
 
 logger = logging.getLogger(__name__)
@@ -26,6 +25,7 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 
 
 def game_parser(game_inp):
+    """parses games"""
     games = {}
 
     for line in game_inp:
@@ -60,28 +60,17 @@ def part_one():
         for r in game[1]:
             for c in r.items():
                 if int(c[1]) > max_lookup[c[0]]:
-                    # print("BAD VALUE: ", c[0], c[1])
                     failed_game = True
 
         if not failed_game:
-            # print("GOOD GAME:")
-            # print(game[1])
-            # print()
             good_games[game[0]] = game[1]
         else:
-            # print("BAD GAME:")
-            # print(game[1])
-            # print()
             bad_games[game[0]] = game[1]
-
-    # pprint(good_games)
-    # print("--------")
-    # pprint(bad_games)
 
     total = 0
     for g in good_games.items():
         total += int(g[0])
-    print("Total:", total)
+    print("Part One:", total)
 
 
 def part_two():
@@ -115,9 +104,9 @@ def part_two():
             gval = gval * int(v[1])
         total += gval
 
-    print(total)
+    print("Part Two:", total)
 
 
 if __name__ == "__main__":
-    # part_one()
+    part_one()
     part_two()
