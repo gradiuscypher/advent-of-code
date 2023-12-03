@@ -97,10 +97,10 @@ def part_one():
     for y in range(0, len(schematic)):
         for x in range(0, len(schematic[y])):
             # print(f"{x}, {y}")
-            c = schematic[x][y]
+            c = schematic[y][x]
             if not c.isdigit() and c != ".":
                 # print(f"{x}, {y} - {c}")
-                values = get_adjacent(schematic, y, x)
+                values = get_adjacent(schematic, x, y)
                 value_set.extend(values)
 
     # print("Value Set:", value_set)
@@ -117,9 +117,9 @@ def part_two():
     for y in range(0, len(schematic)):
         for x in range(0, len(schematic[y])):
             # print(f"{x}, {y}")
-            c = schematic[x][y]
+            c = schematic[y][x]
             if c == "*":
-                values = list(get_adjacent(schematic, y, x))
+                values = list(get_adjacent(schematic, x, y))
                 if len(values) == 2:
                     total += values[0] * values[1]
 
@@ -128,5 +128,5 @@ def part_two():
 
 
 if __name__ == "__main__":
-    # part_one()
+    part_one()
     part_two()
