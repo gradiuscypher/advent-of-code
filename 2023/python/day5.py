@@ -226,7 +226,7 @@ def part_two_mp(debug):
     # create the processes
     processes = []
     values = []
-    for _ in range(128):
+    for _ in range(8):
         r_value = Value("i", -1)
         p = Process(
             target=part_two_mp_worker,
@@ -250,7 +250,70 @@ def part_two_mp(debug):
     print("Part 2:", low_value)
 
 
+def part_two_simple(inp):
+    """stop doing math"""
+    inp = get_input(2023, 5)
+    inp = inp.strip()
+    inp = [line.strip("\n") for line in inp.split("\n")]
+    seeds = [*map(int, inp[0].split(": ")[1].split())]
+    maps = [
+        [[*map(int, n.split())] for n in i.split("\n")[1:]]
+        for i in "\n".join(inp[2:]).split("\n\n")
+    ]
+    for m in maps:
+        print(m)
+
+    locs = []
+    seed_pairs = [
+        (seeds[i], seeds[i] + seeds[i + 1] - 1) for i in range(0, len(seeds), 2)
+    ]
+    print("SEED PARIS:", seed_pairs)
+    for pair in seed_pairs:
+        pairs_left = [pair]
+        result = []
+
+        for m in maps:
+            print("Current map:", m)
+            while pairs_left:
+                c_pair = pairs_left.pop()
+                print("c_pair:", c_pair)
+                print("PAIRS LEFT:", pairs_left)
+                for dest, src, m_range in m:
+                    if c_pair[1] < src or src + m_range <= c_pair[0]:
+                        continue
+                    elif src <= c_pair[0] <= c_pair[1] < src + m_range:
+                        offset = c_pair[0] - src
+                        result.append(
+                            (dest + offset, dest + offset + c_pair[1] - c_pair[0])
+                        )
+                        break
+                    elif c_pair[0] < src <= c_pair[1] < src + m_range:
+                        offset = c_pair[1] - src
+                        result.append((dest, dest + offset))
+                        pairs_left.append((c_pair[0], src - 1))
+                        break
+                    elif src <= c_pair[0] < src + m_range <= c_pair[1]:
+                        offset = c_pair[0] - src
+                        result.append((dest + offset, dest + m_range - 1))
+                        pairs_left.append((src + m_range, c_pair[1]))
+                        break
+                    elif c_pair[0] < src <= src + m_range <= c_pair[1]:
+                        result.append((dest, dest + m_range - 1))
+                        pairs_left.append((c_pair[0], src - 1))
+                        pairs_left.append((src + m_range, c_pair[1]))
+                        break
+                else:
+                    result.append(c_pair)
+            pairs_left = result
+            result = []
+        locs.extend(pairs_left)
+
+    # print(locations)
+    print("Part Two:", min(i[0] for i in locs))
+
+
 if __name__ == "__main__":
     # part_one(debug=False)
     # part_two(False)
-    part_two_mp(False)
+    # part_two_mp(False)
+    part_two_simple(TEST_INP)
