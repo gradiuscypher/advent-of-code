@@ -4,7 +4,7 @@ solution for dayN
 tags:
 """
 import logging
-from math import sqrt
+from math import sqrt, ceil, floor
 from helpers import get_input
 
 
@@ -45,15 +45,19 @@ def part_one():
 
 
 def part_two():
-    """solution for part two
-    t : time held = (m - r)
-    r : time remaining = (m - t)
-    m : max time = (t + r)
-    d : distance = (t * r)
-    """
-    inp = TEST_INP
-    # inp = get_input(2023, 6)
+    """solution for part two"""
+    # inp = TEST_INP
+    inp = get_input(2023, 6)
     inp = inp.splitlines()
+    time = int("".join(inp[0].split(":")[1].strip().split()))
+    dist = int("".join(inp[1].split(":")[1].strip().split()))
+
+    # more math than ive done in 10 years
+    # lmao i pretty much rederived the quadratic formula before noticing
+    first = (-time + sqrt(time**2 - 4 * dist)) / -2
+    second = (-time - sqrt(time**2 - 4 * dist)) / -2
+    record_count = ceil(second) - floor(first) - 1
+    print("Part 2:", record_count)
 
 
 if __name__ == "__main__":
