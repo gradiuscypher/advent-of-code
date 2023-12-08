@@ -79,8 +79,12 @@ def get_hand_type(hand_str):
     return 0
 
 
-def is_bigger(h1, h2):
+def is_bigger(h1, h2, p2=False):
+    """is it bigger"""
+
     value_dict = {"T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}
+    if p2:
+        value_dict = {"T": 10, "J": 0, "Q": 12, "K": 13, "A": 14}
 
     h1 = [int(c) if c.isdigit() else value_dict[c] for c in h1]
     h2 = [int(c) if c.isdigit() else value_dict[c] for c in h2]
