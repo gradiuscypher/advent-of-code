@@ -31,8 +31,9 @@ HAND_LOOKUP = {
     4: "Three of a Kind",
     3: "Two Pair",
     2: "One Pair",
-    1: "High Card"
+    1: "High Card",
 }
+
 
 def parse_hands(inp):
     """parse hand strings into lists of chars"""
@@ -77,34 +78,38 @@ def get_hand_type(hand_str):
 
     return 0
 
+
 def is_bigger(h1, h2):
     value_dict = {"T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}
 
     h1 = [int(c) if c.isdigit() else value_dict[c] for c in h1]
     h2 = [int(c) if c.isdigit() else value_dict[c] for c in h2]
 
-    for i,c in enumerate(h1):
+    for i, c in enumerate(h1):
         if c > h2[i]:
             return True
         if h2[i] > c:
             return False
     return False
 
+
 def sort_hands(hand_list):
     """compares hands and returns them in order low to high"""
-    # TODO: this has to be broken
     sorted_list = hand_list[:1]
 
     for h1 in hand_list[1:]:
+        has_sorted = False
+
         for i, h2 in enumerate(sorted_list):
             if is_bigger(h1, h2):
                 sorted_list.insert(i, h1)
-                # print(h1, "IS BIGGER", h2)
+                print(h1, "IS BIGGER", h2)
+                has_sorted = True
                 break
-            else:
-                sorted_list.append(h1)
-                # print(h2, "IS BIGGER", h1)
-                break
+
+        if not has_sorted:
+            sorted_list.append(h1)
+            print(h1, "TO THE END")
 
     return sorted_list
 
