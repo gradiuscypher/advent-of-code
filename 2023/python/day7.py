@@ -68,19 +68,30 @@ def get_hand_type(hand_str):
 
     return 0
 
+def is_bigger(h1, h2):
+    value_dict = {"T": 10, "J": 11, "Q": 12, "K": 13, "A": 14}
+
+    h1 = [int(c) if c.isdigit() else value_dict[c] for c in h1]
+    h2 = [int(c) if c.isdigit() else value_dict[c] for c in h2]
+
+    for i,c in enumerate(h1):
+        if c > h2[i]:
+            return True
+    return False
 
 def sort_hands(hand_list):
     """compares hands and returns them in order low to high"""
-    value_dict = {"T": "10", "J": "11", "Q": "12", "K": "13", "A": "14"}
+    sorted_list = hand_list[:1]
 
-    hand_values = {}
+    for h1 in hand_list[1:]:
+        for i, h2 in enumerate(sorted_list):
+            if is_bigger(h1, h2):
+                sorted_list.insert(i, h1)
+                print(h1, "IS BIGGER", h2)
+                break
+            sorted_list.append(h1)
 
-    # TODO: this sort doesn't work
-    for h in hand_list:
-        num_hand = [value_dict[c] if not c.isdigit() else c for c in h]
-        hand_values[h] = int("".join(num_hand))
-
-    return [c[0] for c in sorted(hand_values.items(), key=lambda x:x[1])]
+    return sorted_list
 
 
 def part_one():
@@ -109,7 +120,7 @@ def part_one():
 
     for k in values:
         # sort_list = sorted(values[k], reverse=True)
-        sort_list = (sort_hands(values[k]))
+        sort_list = sort_hands(values[k])
         ranked.extend(sort_list)
 
     print("Ranked:", ranked)
