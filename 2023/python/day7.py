@@ -75,19 +75,20 @@ def sort_hands(hand_list):
 
     hand_values = {}
 
+    # TODO: this sort doesn't work
     for h in hand_list:
         num_hand = [value_dict[c] if not c.isdigit() else c for c in h]
         hand_values[h] = int("".join(num_hand))
 
-    print(hand_values)
+    return [c[0] for c in sorted(hand_values.items(), key=lambda x:x[1])]
 
 
 def part_one():
     """solution for part one
     253530450 - too low
     """
-    # inp = TEST_INP
-    inp = get_input(2023, 7)
+    inp = TEST_INP
+    # inp = get_input(2023, 7)
     inp = inp.strip()
     hands = parse_hands(inp)
 
@@ -107,9 +108,11 @@ def part_one():
     values = dict(sorted(values.items()))
 
     for k in values:
-        sort_list = sorted(values[k], reverse=True)
+        # sort_list = sorted(values[k], reverse=True)
+        sort_list = (sort_hands(values[k]))
         ranked.extend(sort_list)
 
+    print("Ranked:", ranked)
     total = 0
     for i, r in enumerate(ranked):
         total += (i + 1) * int(hand_lookup[r])
