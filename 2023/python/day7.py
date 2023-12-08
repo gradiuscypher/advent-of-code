@@ -24,6 +24,15 @@ KTJJT 220
 QQQJA 483
 """
 
+HAND_LOOKUP = {
+    7: "Five of a Kind",
+    6: "Four of a Kind",
+    5: "Full House",
+    4: "Three of a Kind",
+    3: "Two Pair",
+    2: "One Pair",
+    1: "High Card"
+}
 
 def parse_hands(inp):
     """parse hand strings into lists of chars"""
@@ -77,19 +86,25 @@ def is_bigger(h1, h2):
     for i,c in enumerate(h1):
         if c > h2[i]:
             return True
+        if h2[i] > c:
+            return False
     return False
 
 def sort_hands(hand_list):
     """compares hands and returns them in order low to high"""
+    # TODO: this has to be broken
     sorted_list = hand_list[:1]
 
     for h1 in hand_list[1:]:
         for i, h2 in enumerate(sorted_list):
             if is_bigger(h1, h2):
                 sorted_list.insert(i, h1)
-                print(h1, "IS BIGGER", h2)
+                # print(h1, "IS BIGGER", h2)
                 break
-            sorted_list.append(h1)
+            else:
+                sorted_list.append(h1)
+                # print(h2, "IS BIGGER", h1)
+                break
 
     return sorted_list
 
@@ -97,9 +112,10 @@ def sort_hands(hand_list):
 def part_one():
     """solution for part one
     253530450 - too low
+    254076898 - too high
     """
-    inp = TEST_INP
-    # inp = get_input(2023, 7)
+    # inp = TEST_INP
+    inp = get_input(2023, 7)
     inp = inp.strip()
     hands = parse_hands(inp)
 
@@ -111,6 +127,8 @@ def part_one():
     for h, b in hands:
         hand_lookup[h] = b
         hand_value = get_hand_type(h)
+        if HAND_LOOKUP[hand_value] == "Five of a Kind":
+            print("FK:", h)
 
         if hand_value in values.keys():
             values[get_hand_type(h)].append(h)
@@ -121,6 +139,8 @@ def part_one():
     for k in values:
         # sort_list = sorted(values[k], reverse=True)
         sort_list = sort_hands(values[k])
+        sort_list.reverse()
+
         ranked.extend(sort_list)
 
     print("Ranked:", ranked)
