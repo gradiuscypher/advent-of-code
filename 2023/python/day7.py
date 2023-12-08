@@ -45,7 +45,7 @@ def parse_hands(inp):
     return hand_list
 
 
-def get_hand_type(hand_str):
+def get_hand_type(hand_str, p2=False):
     """gets the hand type"""
 
     # five of a kind - 7
@@ -136,8 +136,6 @@ def part_one():
     for h, b in hands:
         hand_lookup[h] = b
         hand_value = get_hand_type(h)
-        if HAND_LOOKUP[hand_value] == "Five of a Kind":
-            print("FK:", h)
 
         if hand_value in values.keys():
             values[get_hand_type(h)].append(h)
@@ -162,6 +160,39 @@ def part_one():
 
 def part_two():
     """solution for part two"""
+    # inp = TEST_INP
+    inp = get_input(2023, 7)
+    inp = inp.strip()
+    hands = parse_hands(inp)
+
+    ranked = []
+    hand_lookup = {}
+    values = {}
+
+    # sort the hands to their values
+    for h, b in hands:
+        hand_lookup[h] = b
+        hand_value = get_hand_type(h)
+
+        if hand_value in values.keys():
+            values[get_hand_type(h)].append(h)
+        else:
+            values[get_hand_type(h)] = [h]
+    values = dict(sorted(values.items()))
+
+    for k in values:
+        # sort_list = sorted(values[k], reverse=True)
+        sort_list = sort_hands(values[k])
+        sort_list.reverse()
+
+        ranked.extend(sort_list)
+
+    print("Ranked:", ranked)
+    total = 0
+    for i, r in enumerate(ranked):
+        total += (i + 1) * int(hand_lookup[r])
+
+    print("Part Two:", total)
 
 
 if __name__ == "__main__":
