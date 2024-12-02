@@ -1,4 +1,4 @@
-#!/bin/bash poetry --version
+#!/usr/bin/env python3
 """
 solution for dayN
 tags:
