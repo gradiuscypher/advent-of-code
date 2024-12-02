@@ -158,6 +158,17 @@ def part_one():
     print("Part One:", total)
 
 
+def up_joker(hand):
+    """updates a hand by replacing the Joker"""
+    all_cards = list("123456789TJQKA")
+
+    highest_value = ["", None]
+
+    for card in all_cards:
+        new_hand = hand.replace("J", card)
+        print(new_hand)
+
+
 def part_two():
     """solution for part two"""
     # inp = TEST_INP
@@ -196,4 +207,5 @@ def part_two():
 
 
 if __name__ == "__main__":
-    part_one()
+    # part_one()
+    up_joker("KTJJT")
