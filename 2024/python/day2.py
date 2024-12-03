@@ -66,10 +66,51 @@ def part_one(data: list[str]):
     print("Part 1:", len(valid))
 
 
-def part_two():
+def part_two(data: list[str]):
     """solution for part two"""
+    increasing = []
+    decreasing = []
+
+    # check all increasing/decreasing
+    # TODO: this doesnt work
+    for line in data:
+        reports = [int(i) for i in line.split()]
+        if reports:
+            is_decreasing = [
+                reports[i] > reports[i + 1] for i in range(0, len(reports) - 1)
+            ]
+            if sum(1 for check in is_decreasing if not check) < 2:
+                decreasing.append(reports)
+
+            is_increasing = [
+                reports[i] > reports[i + 1] for i in range(0, len(reports) - 1)
+            ]
+            if sum(1 for check in is_increasing if not check) < 2:
+                increasing.append(reports)
+
+    # check the distances between the numbers
+    valid = []
+    for report in increasing:
+        valid_increasing = [
+            (report[i + 1] - report[i] <= 3 and report[i + 1] - report[i] > 0)
+            for i in range(0, len(report) - 1)
+        ]
+
+        if sum(1 for check in valid_increasing if not check) < 2:
+            valid.append(report)
+
+    for report in decreasing:
+        valid_decreasing = [
+            (report[i] - report[i + 1] <= 3 and report[i] - report[i + 1] > 0)
+            for i in range(0, len(report) - 1)
+        ]
+        if sum(1 for check in valid_decreasing if not check) < 2:
+            valid.append(report)
+
+    print(valid, is_increasing, is_decreasing)
 
 
 if __name__ == "__main__":
     data = get_input(2024, 2).split("\n")
-    part_one(data)
+    # part_one(data)
+    part_two(EX_1)
