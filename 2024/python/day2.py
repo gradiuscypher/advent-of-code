@@ -26,6 +26,34 @@ EX_1 = """
 """.split("\n")
 
 
+def check_is_decreasing(reports: list[int]):
+    return [reports[i] > reports[i + 1] for i in range(0, len(reports) - 1)]
+
+
+def check_is_increasing(reports: list[int]):
+    return [reports[i] < reports[i + 1] for i in range(0, len(reports) - 1)]
+
+
+def check_valid_increasing(report):
+    return all(
+        (report[i + 1] - report[i] <= 3 and report[i + 1] - report[i] > 0)
+        for i in range(0, len(report) - 1)
+    )
+
+
+def check_valid_decreasing(report):
+    return all(
+        (report[i] - report[i + 1] <= 3 and report[i] - report[i + 1] > 0)
+        for i in range(0, len(report) - 1)
+    )
+
+
+def remove_false_value(check_list, value_list):
+    first_false = check_list.index(False)
+    del value_list[first_false]
+    return value_list
+
+
 def part_one(data: list[str]):
     """solution for part one"""
     increasing = []
@@ -70,23 +98,43 @@ def part_two(data: list[str]):
     """solution for part two"""
     increasing = []
     decreasing = []
+    increasing_changed = []
+    decreasing_changed = []
 
     # check all increasing/decreasing
-    # TODO: this doesnt work
     for line in data:
         reports = [int(i) for i in line.split()]
         if reports:
-            is_decreasing = [
-                reports[i] > reports[i + 1] for i in range(0, len(reports) - 1)
-            ]
-            if sum(1 for check in is_decreasing if not check) < 2:
+            is_decreasing = check_is_decreasing(reports)
+            # this means there were no false, so it automatically passes
+            false_count = sum(1 for check in is_decreasing if not check)
+            if false_count == 0:
                 decreasing.append(reports)
 
-            is_increasing = [
-                reports[i] > reports[i + 1] for i in range(0, len(reports) - 1)
-            ]
-            if sum(1 for check in is_increasing if not check) < 2:
+            # check if removing the value at the same index of the single False helps make it valid
+            elif false_count == 1:
+                new_list = remove_false_value(is_decreasing, reports)
+                is_new_decreasing = check_is_decreasing(new_list)
+                false_count = sum(1 for check in is_new_decreasing if not check)
+
+                if false_count == 0:
+                    decreasing_changed.append(new_list)
+
+            is_increasing = check_is_increasing(reports)
+            false_count = sum(1 for check in is_increasing if not check)
+
+            # this means there were no false, so it automatically passes
+            if false_count == 0:
                 increasing.append(reports)
+
+            # check if removing the value at the same index of the single False helps make it valid
+            elif false_count == 1:
+                new_list = remove_false_value(is_increasing, reports)
+                is_new_increasing = check_is_increasing(new_list)
+                false_count = sum(1 for check in is_new_increasing if not check)
+
+                if false_count == 0:
+                    increasing_changed.append(new_list)
 
     # check the distances between the numbers
     valid = []
@@ -95,8 +143,22 @@ def part_two(data: list[str]):
             (report[i + 1] - report[i] <= 3 and report[i + 1] - report[i] > 0)
             for i in range(0, len(report) - 1)
         ]
+        false_count = sum(1 for check in valid_increasing if not check)
+        if false_count == 0:
+            valid.append(report)
 
-        if sum(1 for check in valid_increasing if not check) < 2:
+        elif false_count == 1:
+            new_list = remove_false_value(valid_increasing, report)
+            if check_valid_increasing(new_list):
+                valid.append(new_list)
+
+    for report in increasing_changed:
+        valid_increasing = [
+            (report[i + 1] - report[i] <= 3 and report[i + 1] - report[i] > 0)
+            for i in range(0, len(report) - 1)
+        ]
+        false_count = sum(1 for check in valid_increasing if not check)
+        if false_count == 0:
             valid.append(report)
 
     for report in decreasing:
@@ -104,13 +166,34 @@ def part_two(data: list[str]):
             (report[i] - report[i + 1] <= 3 and report[i] - report[i + 1] > 0)
             for i in range(0, len(report) - 1)
         ]
-        if sum(1 for check in valid_decreasing if not check) < 2:
+        false_count = sum(1 for check in valid_decreasing if not check)
+        if false_count == 0:
+            valid.append(report)
+        elif false_count == 1:
+            new_list = remove_false_value(valid_decreasing, report)
+            if check_valid_decreasing(new_list):
+                valid.append(new_list)
+
+    for report in decreasing_changed:
+        valid_decreasing = [
+            (report[i] - report[i + 1] <= 3 and report[i] - report[i + 1] > 0)
+            for i in range(0, len(report) - 1)
+        ]
+        false_count = sum(1 for check in valid_decreasing if not check)
+        if false_count == 0:
             valid.append(report)
 
-    print(valid, is_increasing, is_decreasing)
+    print("Part 2:", len(valid))
 
 
 if __name__ == "__main__":
+    """
+    468 too low
+    476 ????
+    510 too high
+    516 too high
+    """
     data = get_input(2024, 2).split("\n")
     # part_one(data)
     part_two(EX_1)
+    part_two(data)
